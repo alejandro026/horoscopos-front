@@ -1,0 +1,112 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Formulario de horóscopos</mat-card-title>
+  </mat-card-header>
+  <br>
+  <mat-card-content>
+    <div class="container">
+      <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
+        <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta1">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta2">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="row">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta3">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta4">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta5">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta6">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta7">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta8">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta9">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select formControlName="pregunta10">
+                <mat-option value="one">First option</mat-option>
+                <mat-option value="two">Second option</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+        </div>
+        <div class="buttons-container">
+          <button mat-raised-button color="primary" type="submit">Enviar</button>
+        </div>
+      </form>
+    </div>
+
+  </mat-card-content>
+</mat-card>
