@@ -1,0 +1,19 @@
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.ocultar{
+  display: none;
+}
+
+
+.verde{
+  background-color: green !important;
+  color: white !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
