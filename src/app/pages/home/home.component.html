@@ -1,107 +1,140 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Formulario de horóscopos</mat-card-title>
+    <mat-card-title>Horóscopos</mat-card-title>
   </mat-card-header>
   <br>
   <mat-card-content>
     <div class="container">
+      <p class="subtitulo">Hola, estamos recolectando información acerca de seis signos zodiacales ¿Nos ayudas?</p>
       <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
         <div class="row">
+            <p>1. ¿Qué signo zodiacal eres?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta1">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Aries</mat-option>
+                <mat-option value="2">Tauro</mat-option>
+                <mat-option value="3">Géminis</mat-option>
+                <mat-option value="4">Cáncer</mat-option>
+                <mat-option value="5">Leo</mat-option>
+                <mat-option value="6">Virgo</mat-option>
               </mat-select>
             </mat-form-field>
+
+            <p>2. ¿Cosideras que eres un líder natural? Por ejemplo, en un trabajo en equipo eres tú quen lleva  acabo la organización sin que nadie te lo pida.</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta2">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
         </div>
         <div class="row">
 
+            <p>3. ¿Sueles ser impulsivo?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta3">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
-
+            <p>4. ¿Eres perseverante para alcanzar tus metas y objetivos?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta4">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
         </div>
         <div class="row">
 
+            <p>5. ¿La curiosidad es lo tuyo?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta5">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
-
+            <p>6. ¿Tienes mucha autoconfianza y te gusta ser el centro de atención?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta6">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
         </div>
         <div class="row">
 
+            <p>7. ¿Te preocupas mucho por la organiación y el orden?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta7">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
-
+            <p>8. ¿Consideras que eres muy sensible y cariñoso?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta8">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
         </div>
         <div class="row">
 
+            <p>9. ¿Sueles ser reservado y tener cambios de humor frecuentes?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta9">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
-
+            <p>10. ¿Eres paciente y práctico?</p>
             <mat-form-field appearance="outline">
               <mat-label>Selecciona una opción</mat-label>
               <mat-select formControlName="pregunta10">
-                <mat-option value="one">First option</mat-option>
-                <mat-option value="two">Second option</mat-option>
+                <mat-option value="1">Sí</mat-option>
+                <mat-option value="0">No</mat-option>
               </mat-select>
             </mat-form-field>
 
         </div>
+        <div class="row">
+
+          <p>11. ¿Te gusta explorar diferentes ideas y perspectivas?</p>
+          <mat-form-field appearance="outline">
+            <mat-label>Selecciona una opción</mat-label>
+            <mat-select formControlName="pregunta11">
+              <mat-option value="1">Sí</mat-option>
+              <mat-option value="0">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <p>12. ¿Crees que eres impaciente?</p>
+          <mat-form-field appearance="outline">
+            <mat-label>Selecciona una opción</mat-label>
+            <mat-select formControlName="pregunta12">
+              <mat-option value="1">Sí</mat-option>
+              <mat-option value="0">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+      </div>
         <div class="buttons-container">
           <button mat-raised-button color="primary" type="submit">Enviar</button>
         </div>

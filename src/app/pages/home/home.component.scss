@@ -5,6 +5,10 @@ mat-card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+mat-card-title{
+  color: #9585b6;
+}
+
 mat-card-header {
   display: flex;
   justify-content: center;
@@ -14,4 +18,9 @@ mat-card-header {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+}
+
+.subtitulo{
+  text-align: center;
+  color: #5c4c7c;
 }

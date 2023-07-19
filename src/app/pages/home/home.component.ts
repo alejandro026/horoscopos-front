@@ -28,6 +28,8 @@ export class HomeComponent implements OnInit{
       pregunta8: ['', Validators.required],
       pregunta9: ['', Validators.required],
       pregunta10: ['', Validators.required],
+      pregunta11: ['', Validators.required],
+      pregunta12: ['', Validators.required]
     });
   }
 
