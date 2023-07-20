@@ -81,4 +81,9 @@ export class AdminComponent implements OnInit{
     window.URL.revokeObjectURL(url);
   }
 
+  limpiar(){
+    this.dataSource=new MatTableDataSource([]);
+    this.displayedColumns=[]
+  }
+
 }
