@@ -10,6 +10,6 @@ export class HoroscoposService {
 
   consultarDatos(){
     // https://backend-horoscopos.onrender.com/consultar-datos
-    return this.http.get('hhttps://backend-horoscopos.onrender.com/consultar-datos')
+    return this.http.get('https://backend-horoscopos.onrender.com/consultar-datos')
   }
 }
