@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-home',
@@ -40,7 +42,12 @@ export class HomeComponent implements OnInit{
         .subscribe(
           (response) => {
             console.log('Datos guardados correctamente en la base de datos');
-            // Me faltó agregarle una alertita que diga gracias por contestar
+            Swal.fire({
+              title: 'Respuestas guardadas',
+              text: 'Muchas gracias por contestar c:',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
           },
           (error) => {
             console.error('Error al guardar los datos en la base de datos: ', error);
