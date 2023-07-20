@@ -69,6 +69,19 @@ app.post('/guardar-datos', (req, res) => {
   );
 });
 
+app.get('/consultar-datos',(req, res)=>{
+  db.query("SELECT * FROM recoleccion_datos",
+  (err, result) => {
+    if (err) {
+      console.error('Error al guardar los datos en la base de datos: ', err);
+      res.status(500).json({ message: 'Error al guardar los datos en la base de datos' });
+    } else {
+      console.log('Datos guardados correctamente.');
+      res.status(200).json({ data: result });
+    }
+  });
+})
+
 // Iniciar el servidor
 app.listen(port, () => {
   console.log(`Servidor backend iniciado en http://localhost:${port}`);
