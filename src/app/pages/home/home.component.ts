@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -13,10 +14,10 @@ export class HomeComponent implements OnInit{
   formulario: FormGroup;
 
   // Constructor donde se inyecta el FormBuilder
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   ngOnInit() {
-    // Inicializar el formulario con 10 preguntas y validaciones
+    // Inicializar el formulario con 12 preguntas y validaciones
     this.formulario = this.fb.group({
       pregunta1: ['', Validators.required],
       pregunta2: ['', Validators.required],
@@ -33,12 +34,19 @@ export class HomeComponent implements OnInit{
     });
   }
 
-    // Función para enviar el formulario
-    enviarFormulario() {
+    guardarDatos(formData: any) {
       if (this.formulario.valid) {
-        // Aquí puedes procesar los datos del formulario
-        console.log(this.formulario.value);
-      }
+      this.http.post<any>('http://localhost:3000/guardar-datos', formData)
+        .subscribe(
+          (response) => {
+            console.log('Datos guardados correctamente en la base de datos');
+            // Me faltó agregarle una alertita que diga gracias por contestar
+          },
+          (error) => {
+            console.error('Error al guardar los datos en la base de datos: ', error);
+          }
+        );
+        }
     }
 
 }

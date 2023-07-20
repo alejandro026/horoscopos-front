@@ -6,7 +6,7 @@
   <mat-card-content>
     <div class="container">
       <p class="subtitulo">Hola, estamos recolectando información acerca de seis signos zodiacales ¿Nos ayudas?</p>
-      <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()">
+      <form [formGroup]="formulario" (ngSubmit)="guardarDatos(formulario.value)">
         <div class="row">
             <p>1. ¿Qué signo zodiacal eres?</p>
             <mat-form-field appearance="outline">
