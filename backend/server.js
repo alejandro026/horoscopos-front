@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
@@ -13,14 +13,16 @@ app.use(cors({
 
 // Configuración de conexión a la base de datos MySQL
 const db = mysql.createConnection({
-//   host: 'containers-us-west-59.railway.app',
-//   user: 'root',
-//   password: 'L4Dgxt5yWmkZ5dbRmBaO',
-//   database: 'horoscopos'
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'horoscopos'
+  host: 'containers-us-west-59.railway.app',
+  user: 'root',
+  password: 'L4Dgxt5yWmkZ5dbRmBaO',
+  database: 'horoscopos',
+  port: '7440',
+
+    // host: 'localhost',
+    // user: 'root',
+    // password: '',
+    // database: 'horoscopos'
 });
 
 db.connect((err) => {
