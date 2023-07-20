@@ -17,3 +17,41 @@
   display: flex;
   justify-content: space-between;
 }
+
+
+mat-card {
+  width: 90%;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title{
+  color: #9585b6;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: center;
+}
+
+// .buttons-container {
+//   display: flex;
+//   justify-content: flex-end;
+//   margin-top: 20px;
+// }
+
+.subtitulo{
+  text-align: center;
+  color: #5c4c7c;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+}
+
+.custom-button {
+  min-width: 23vh !important; /* Establece el ancho mínimo para los botones */
+  text-align: center !important; /* Centra el texto en los botones */
+}
