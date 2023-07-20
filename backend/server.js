@@ -74,7 +74,7 @@ app.get('/consultar-datos',(req, res)=>{
   (err, result) => {
     if (err) {
       console.error('Error al consultar los datos en la base de datos: ', err);
-      res.status(500).json({ message: 'Error al guardar los datos en la base de datos' });
+      res.status(500).json({ message: 'Error al consultar los datos en la base de datos' });
     } else {
       console.log('Consulta correcta.');
       res.status(200).json({ data: result });
