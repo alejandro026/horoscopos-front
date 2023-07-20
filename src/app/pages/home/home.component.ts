@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit{
 
     guardarDatos(formData: any) {
       if (this.formulario.valid) {
-      this.http.post<any>('http://localhost:3000/guardar-datos', formData)
+      this.http.post<any>('https://backend-horoscopos.onrender.com/guardar-datos', formData)
         .subscribe(
           (response) => {
             console.log('Datos guardados correctamente en la base de datos');

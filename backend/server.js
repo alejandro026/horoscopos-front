@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
@@ -13,14 +13,16 @@ app.use(cors({
 
 // Configuración de conexión a la base de datos MySQL
 const db = mysql.createConnection({
-//   host: 'containers-us-west-59.railway.app',
-//   user: 'root',
-//   password: 'L4Dgxt5yWmkZ5dbRmBaO',
-//   database: 'horoscopos'
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'horoscopos'
+  host: 'containers-us-west-59.railway.app',
+  user: 'root',
+  password: 'L4Dgxt5yWmkZ5dbRmBaO',
+  database: 'horoscopos',
+  port: '7440',
+
+    // host: 'localhost',
+    // user: 'root',
+    // password: '',
+    // database: 'horoscopos'
 });
 
 db.connect((err) => {
@@ -66,6 +68,19 @@ app.post('/guardar-datos', (req, res) => {
     }
   );
 });
+
+app.get('/consultar-datos',(req, res)=>{
+  db.query("SELECT * FROM recoleccion_datos",
+  (err, result) => {
+    if (err) {
+      console.error('Error al consultar los datos en la base de datos: ', err);
+      res.status(500).json({ message: 'Error al consultar los datos en la base de datos' });
+    } else {
+      console.log('Consulta correcta.');
+      res.status(200).json({ data: result });
+    }
+  });
+})
 
 // Iniciar el servidor
 app.listen(port, () => {

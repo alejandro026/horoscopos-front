@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Papa from 'papaparse';
+import { HoroscoposService } from 'src/app/shared/services/horoscopos.service';
+import Swal from 'sweetalert2'
 
 
 @Component({
@@ -13,24 +15,40 @@ export class AdminComponent implements OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  constructor(private horoscoposService: HoroscoposService){
+
+  }
+
   ngOnInit(): void {
 
   }
 
+
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
+
+  //Consultando datos de la base de datos
+  consultarDatos(){
+    this.horoscoposService.consultarDatos().subscribe({next:(data:any)=>{
+      console.log(data.data);
+      //Asigando los datos al datasource
+      this.dataSource = new MatTableDataSource(data.data);
+      //Asignando columnas
+      this.displayedColumns = Object.keys(data.data[0]);
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Datos consultados correctamente',
+        showConfirmButton: true
+        // timer: 1500
+      })
+    }})
+  }
 
   // Método que se ejecuta cuando se selecciona un archivo
   onFileChange(event: any) {
     const file = event.target.files[0];
     this.parseCsv(file);
-  }
-
-  // Método para cargar los datos del archivo CSV en la tabla
-  cargarDatos() {
-    // Puedes realizar aquí cualquier acción adicional que desees antes de cargar los datos
-    // por ejemplo, validar el archivo, procesar los datos, etc.
-    // En este ejemplo, solo se muestra el archivo CSV en la tabla directamente.
   }
 
   // Método para parsear el contenido del archivo CSV
@@ -43,6 +61,15 @@ export class AdminComponent implements OnInit{
       this.dataSource = new MatTableDataSource(parsedData);
       this.dataSource.paginator = this.paginator;
       this.displayedColumns = Object.keys(parsedData[0]);
+
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Datos importados correctamente',
+        showConfirmButton: true
+        // timer: 1500
+      })
+
     };
   }
 

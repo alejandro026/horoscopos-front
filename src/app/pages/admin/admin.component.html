@@ -15,7 +15,8 @@
       </div>
       <!-- <button mat-raised-button color="primary" class="custom-button" (click)="cargarDatos()">Cargar Datos</button> -->
       <button [disabled]="displayedColumns.length==0" mat-raised-button class="verde custom-button" (click)="exportarCSV()">Exportar a CSV</button>
-      <button mat-raised-button class="warn custom-button" (click)="limpiar()">Limpiar</button>
+      <button mat-raised-button color="accent" class="custom-button" (click)="consultarDatos()">Cargar datos de BD</button>
+      <button mat-raised-button color="warn" class="custom-button" (click)="limpiar()">Limpiar</button>
     </div>
 
     <br /><br />
