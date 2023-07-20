@@ -9,7 +9,7 @@ export class HoroscoposService {
   constructor(private http: HttpClient) { }
 
   consultarDatos(){
-    // https://backend-horoscopos.onrender.com/guardar-datos
-    return this.http.get('https://backend-horoscopos.onrender.com/consultar-datos')
+    // https://backend-horoscopos.onrender.com/consultar-datos
+    return this.http.get('hhttps://backend-horoscopos.onrender.com/consultar-datos')
   }
 }
