@@ -37,23 +37,35 @@ export class HomeComponent implements OnInit{
   }
 
     guardarDatos(formData: any) {
-      if (this.formulario.valid) {
-      this.http.post<any>('https://backend-horoscopos.onrender.com/guardar-datos', formData)
-        .subscribe(
-          (response) => {
-            console.log('Datos guardados correctamente en la base de datos');
-            Swal.fire({
-              title: 'Respuestas guardadas',
-              text: 'Muchas gracias por contestar c:',
-              icon: 'success',
-              confirmButtonText: 'OK'
-            });
-          },
-          (error) => {
-            console.error('Error al guardar los datos en la base de datos: ', error);
-          }
-        );
-        }
+      let yaGuardo=localStorage.getItem('guardado');
+      console.log(yaGuardo)
+      if(!yaGuardo){
+        if (this.formulario.valid) {
+          this.http.post<any>('https://backend-horoscopos.onrender.com/guardar-datos', formData)
+            .subscribe(
+              (response) => {
+                console.log('Datos guardados correctamente en la base de datos');
+                localStorage.setItem('guardado', "1");
+                Swal.fire({
+                  title: 'Respuestas guardadas',
+                  text: 'Muchas gracias por contestar c:',
+                  icon: 'success',
+                  confirmButtonText: 'OK'
+                });
+              },
+              (error) => {
+                console.error('Error al guardar los datos en la base de datos: ', error);
+              }
+            );
+            }
+      } else{
+        Swal.fire({
+          title: 'Ya respondiste las preguntas',
+          text: 'Muchas gracias por contestar c:',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
     }
 
 }

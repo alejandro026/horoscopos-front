@@ -28,6 +28,18 @@ const db = mysql.createConnection({
     // database: 'horoscopos'
 });
 
+// Función para reconectar a la base de datos si hay un error
+function handleDisconnect() {
+  db.connect((err) => {
+    if (err) {
+      console.error('Error al reconectar a la base de datos: ', err);
+      // setTimeout(handleDisconnect, 2000); // Intentar reconectar después de 2 segundos
+    } else {
+      console.log('Reconexion exitosa a la base de datos.');
+    }
+  });
+}
+
 db.connect((err) => {
   if (err) {
     console.error('Error al conectar a la base de datos: ', err);
@@ -63,6 +75,7 @@ app.post('/guardar-datos', (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Error al guardar los datos en la base de datos: ', err);
+        handleDisconnect(); // Intentar reconectar a la base de datos
         res.status(500).json({ message: 'Error al guardar los datos en la base de datos' });
       } else {
         console.log('Datos guardados correctamente.');
@@ -77,6 +90,7 @@ app.get('/consultar-datos',(req, res)=>{
   (err, result) => {
     if (err) {
       console.error('Error al consultar los datos en la base de datos: ', err);
+      handleDisconnect(); // Intentar reconectar a la base de datos
       res.status(500).json({ message: 'Error al consultar los datos en la base de datos' });
     } else {
       console.log('Consulta correcta.');
