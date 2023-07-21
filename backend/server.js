@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 const cors = require('cors');
+const json2csv = require('json2csv').Parser;
+const fs = require('fs');
+
 
 const app = express();
 const port = 3000;
@@ -36,7 +39,7 @@ db.connect((err) => {
 // Middleware para parsear el cuerpo de las solicitudes como JSON
 app.use(bodyParser.json());
 
-// Ruta para guardar datos del formulario
+// guardar datos del formulario
 app.post('/guardar-datos', (req, res) => {
   const formData = req.body;
 
@@ -81,6 +84,48 @@ app.get('/consultar-datos',(req, res)=>{
     }
   });
 })
+
+//exportar los datos a CSV
+app.get('/export-csv', (req, res) => {
+  // Obtener los datos de la base de datos (puedes ajustar esta consulta según tu estructura)
+  db.query('SELECT * FROM recoleccion_datos', (err, results) => {
+    if (err) {
+      console.error('Error al obtener los datos de la base de datos: ', err);
+      res.status(500).json({ message: 'Error al obtener los datos de la base de datos' });
+    } else {
+      // Convertir los datos a formato CSV utilizando json2csv
+      const fields = ['pregunta1', 'pregunta2', 'pregunta3', 'pregunta4', 'pregunta5', 'pregunta6', 'pregunta7', 'pregunta8', 'pregunta9', 'pregunta10', 'pregunta11', 'pregunta12'];
+      const json2csvParser = new json2csv({ fields });
+      const csv = json2csvParser.parse(results);
+
+      // Establecer los encabezados y enviar el archivo CSV como respuesta
+      res.setHeader('Content-Disposition', 'attachment; filename=datos_formulario.csv');
+      res.set('Content-Type', 'text/csv');
+      res.status(200).send(csv);
+    }
+  });
+});
+
+// exportar los datos a JSON
+app.get('/export-json', (req, res) => {
+  db.query('SELECT * FROM recoleccion_datos', (err, results) => {
+    if (err) {
+      console.error('Error al obtener los datos de la base de datos: ', err);
+      res.status(500).json({ message: 'Error al obtener los datos de la base de datos' });
+    } else {
+      // Convertir los datos a formato JSON
+      const jsonData = JSON.stringify(results);
+
+      // Establecer los encabezados para enviar el archivo JSON como respuesta
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename=datos_formulario.json');
+
+      // Enviar el archivo JSON como respuesta
+      res.send(jsonData);
+    }
+  });
+});
+
 
 // Iniciar el servidor
 app.listen(port, () => {
