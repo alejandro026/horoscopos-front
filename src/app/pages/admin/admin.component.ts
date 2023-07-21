@@ -35,6 +35,8 @@ export class AdminComponent implements OnInit{
       this.dataSource = new MatTableDataSource(data.data);
       //Asignando columnas
       this.displayedColumns = Object.keys(data.data[0]);
+      this.dataSource.paginator = this.paginator;
+
       Swal.fire({
         position: 'center',
         icon: 'success',
