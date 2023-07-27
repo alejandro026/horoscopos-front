@@ -1,3 +1,4 @@
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <mat-card>
   <mat-card-header>
     <mat-card-title>Subir Dataset</mat-card-title>
@@ -26,7 +27,7 @@
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
       </mat-form-field>
 
-      <button mat-raised-button class="accent">Usar algoritmo K-means</button>
+      <button mat-raised-button class="accent" (click)="obtenerGraficas()">Usar algoritmo K-means</button>
     </div>
     <!-- Agrega una clase al contenedor de la tabla -->
     <div class="table-container mat-elevation-z8" [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
@@ -45,6 +46,14 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
 
 
+    </div>
+
+    <div *ngIf="graficas!=null">
+      <img [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')"  alt="">
+      <img [src]="bytesToImageUrl(graficas.base64_encoded_inercia, 'png')"  alt="">
+      <img [src]="bytesToImageUrl(graficas.base64_encoded_silueta, 'png')"  alt="">
+      <img [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')"  alt="">
+      <img [src]="bytesToImageUrl(graficas.base64_encoded_PCA, 'png')"  alt="">
     </div>
   </mat-card-content>
 </mat-card>

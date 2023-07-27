@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import * as Papa from 'papaparse';
 import { HoroscoposService } from 'src/app/shared/services/horoscopos.service';
 import Swal from 'sweetalert2'
@@ -15,7 +16,10 @@ export class AdminComponent implements OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private horoscoposService: HoroscoposService){
+  graficas:any=null;
+
+  constructor(private horoscoposService: HoroscoposService,
+    private spinner: NgxSpinnerService){
 
   }
 
@@ -29,6 +33,8 @@ export class AdminComponent implements OnInit{
 
   //Consultando datos de la base de datos
   consultarDatos(){
+    this.spinner.show();
+
     this.horoscoposService.consultarDatos().subscribe({next:(data:any)=>{
       console.log(data.data);
       //Asigando los datos al datasource
@@ -36,7 +42,7 @@ export class AdminComponent implements OnInit{
       //Asignando columnas
       this.displayedColumns = Object.keys(data.data[0]);
       this.dataSource.paginator = this.paginator;
-
+      this.spinner.hide();
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -112,7 +118,21 @@ export class AdminComponent implements OnInit{
 
   limpiar(){
     this.dataSource=new MatTableDataSource([]);
-    this.displayedColumns=[]
+    this.displayedColumns=[];
+    this.graficas=null;
   }
+
+  obtenerGraficas(){
+    this.spinner.show();
+    this.horoscoposService.obtenerGraficas().subscribe({next:data=>{
+      this.spinner.hide();
+      console.log(data);
+      this.graficas=data;
+    }})
+  }
+
+  bytesToImageUrl(bytes: Uint8Array, tipoImagen:string): string {
+    return `data:${tipoImagen};base64,${bytes}`;
+}
 
 }

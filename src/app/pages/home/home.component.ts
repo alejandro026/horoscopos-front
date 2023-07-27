@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -15,8 +16,10 @@ export class HomeComponent implements OnInit{
   // Definir el formulario como FormGroup
   formulario: FormGroup;
 
+  cargando:boolean=false;
+
   // Constructor donde se inyecta el FormBuilder
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  constructor(private fb: FormBuilder, private http: HttpClient, private spinner: NgxSpinnerService) {}
 
   ngOnInit() {
     // Inicializar el formulario con 12 preguntas y validaciones
@@ -40,10 +43,14 @@ export class HomeComponent implements OnInit{
       let yaGuardo=localStorage.getItem('guardado');
       console.log(yaGuardo)
       if(!yaGuardo){
+        this.cargando=true
+        this.spinner.show();
         if (this.formulario.valid) {
           this.http.post<any>('https://backend-horoscopos.onrender.com/guardar-datos', formData)
             .subscribe(
               (response) => {
+                this.cargando=false;
+                this.spinner.hide();
                 console.log('Datos guardados correctamente en la base de datos');
                 localStorage.setItem('guardado', "1");
                 Swal.fire({
@@ -54,11 +61,18 @@ export class HomeComponent implements OnInit{
                 });
               },
               (error) => {
+                this.cargando=false;
+                this.spinner.hide();
                 console.error('Error al guardar los datos en la base de datos: ', error);
               }
             );
+            }else{
+              this.cargando=false;
+              this.spinner.hide();
             }
       } else{
+        this.cargando=false;
+        this.spinner.hide();
         Swal.fire({
           title: 'Ya respondiste las preguntas',
           text: 'Muchas gracias por contestar c:',

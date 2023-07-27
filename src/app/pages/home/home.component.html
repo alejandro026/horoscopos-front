@@ -1,3 +1,4 @@
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 <mat-card>
   <mat-card-header>
     <mat-card-title>Horóscopos</mat-card-title>
@@ -136,7 +137,7 @@
 
       </div>
         <div class="buttons-container">
-          <button mat-raised-button color="primary" type="submit">Enviar</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="cargando">Enviar</button>
         </div>
       </form>
     </div>

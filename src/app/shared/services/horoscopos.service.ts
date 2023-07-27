@@ -12,4 +12,9 @@ export class HoroscoposService {
     // https://backend-horoscopos.onrender.com/consultar-datos
     return this.http.get('https://backend-horoscopos.onrender.com/consultar-datos')
   }
+
+  obtenerGraficas(){
+    return this.http.get('http://localhost:5000/kmeans')
+  }
+
 }
