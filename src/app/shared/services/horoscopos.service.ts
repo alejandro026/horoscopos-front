@@ -14,8 +14,8 @@ export class HoroscoposService {
   }
 
   obtenerGraficas(){
-    return this.http.get('http://localhost:5000/kmeans')
-    // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
+    // return this.http.get('http://localhost:5000/kmeans')
+    return this.http.get('https://horoscopos-python.onrender.com/kmeans')
   }
 
 }
