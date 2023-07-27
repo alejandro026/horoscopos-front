@@ -28,6 +28,7 @@
       </mat-form-field>
 
       <button mat-raised-button class="accent" (click)="obtenerGraficas()">Usar algoritmo K-means</button>
+      <button mat-raised-button class="accent" (click)="enviarDatos()">Enviar datos</button>
     </div>
     <!-- Agrega una clase al contenedor de la tabla -->
     <div class="table-container mat-elevation-z8" [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
@@ -49,7 +50,7 @@
     </div>
 
     <div *ngIf="graficas!=null">
-      <img [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')"  alt="">
+      <img [src]="bytesToImageUrl(graficas.centroidesOriginales, 'png')"  alt="">
       <img [src]="bytesToImageUrl(graficas.base64_encoded_inercia, 'png')"  alt="">
       <img [src]="bytesToImageUrl(graficas.base64_encoded_silueta, 'png')"  alt="">
       <img [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')"  alt="">

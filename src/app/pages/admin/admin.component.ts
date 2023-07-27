@@ -50,6 +50,16 @@ export class AdminComponent implements OnInit{
         showConfirmButton: true
         // timer: 1500
       })
+    }, error:e=>{
+      this.spinner.hide();
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Ocurrio un error al realizar la consulta',
+        showConfirmButton: true
+        // timer: 1500
+      })
+
     }})
   }
 
@@ -128,11 +138,46 @@ export class AdminComponent implements OnInit{
       this.spinner.hide();
       console.log(data);
       this.graficas=data;
+    }, error:e=>{
+      this.spinner.hide();
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Ocurrio un error al generar las graficas',
+        showConfirmButton: true
+        // timer: 1500
+      })
     }})
   }
 
   bytesToImageUrl(bytes: Uint8Array, tipoImagen:string): string {
     return `data:${tipoImagen};base64,${bytes}`;
-}
+  }
+
+  enviarDatos(){
+   if(this.dataSource && this.dataSource.filteredData.length>0){
+    const datosFinales=[];
+
+    //Se quitan las primeras dos preguntas.
+    this.dataSource.filteredData.forEach(data=>{
+      const { id, pregunta1, ...resto } = data;
+      datosFinales.push(resto);
+    });
+    console.log(datosFinales);
+    this.horoscoposService.enviarDatos(datosFinales).subscribe({next: data=>{
+      console.log(data)
+    }, error:e=>{
+
+    }})
+   }else{
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: 'Es necesario cargar el set de datos',
+      showConfirmButton: true
+      // timer: 1500
+    })
+   }
+  }
 
 }
