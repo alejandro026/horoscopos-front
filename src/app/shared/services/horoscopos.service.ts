@@ -18,8 +18,8 @@ export class HoroscoposService {
     return this.http.get('https://horoscopos-python.onrender.com/kmeans')
   }
   enviarDatos(datos){
-    // return this.http.post('http://localhost:5000/recibir_json', datos)
-    return this.http.get('https://horoscopos-python.onrender.com/kmeans')
+    return this.http.post('https://horoscopos-python.onrender.com/recibir_json', datos)
+    // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
   }
 
 }
