@@ -14,6 +14,10 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
+// Available options
+interface NgxSpinnerConfig {
+  type?: string;
+}
 
 @NgModule({
   declarations: [
@@ -31,7 +35,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatSelectModule,
     MatTableModule,
     MatPaginatorModule,
-    NgxSpinnerModule
+    NgxSpinnerModule.forRoot({ type: 'square-jelly-box' }),
   ]
 })
 export class AdminModule { }
