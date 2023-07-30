@@ -15,10 +15,15 @@ export class HoroscoposService {
 
   obtenerGraficas(){
     // return this.http.get('http://localhost:5000/kmeans')
-    return this.http.get('https://horoscopos-python.onrender.com/kmeans')
+    return this.http.get('http://127.0.0.1:5000/kmeans')
   }
   enviarDatos(datos){
-    return this.http.post('https://horoscopos-python.onrender.com/recibir_json', datos)
+    return this.http.post('http://127.0.0.1:5000/recibir_json', datos)
+    // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
+  }
+
+  aplicarFiltros(datos){
+    return this.http.post('http://127.0.0.1:5000/filtrar', datos)
     // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
   }
 

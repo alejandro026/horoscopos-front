@@ -9,6 +9,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ExportarDatasetComponent } from './pages/exportar-dataset/exportar-dataset.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { FormsModule } from '@angular/forms'; 
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -12,7 +12,8 @@ export class ExportarDatasetComponent {
 
   exportarCsv() {
     // Llamar a la ruta '/export-csv' en el servidor
-    this.http.get('https://backend-horoscopos.onrender.com/export-csv', { responseType: 'blob' })
+    //this.http.get('https://backend-horoscopos.onrender.com/export-csv', { responseType: 'blob' })
+    this.http.get('http://localhost:3000/export-csv', { responseType: 'blob' })
       .subscribe(
         (data: Blob) => {
           // Crear un objeto URL para el archivo CSV

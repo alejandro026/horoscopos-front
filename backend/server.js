@@ -108,7 +108,7 @@ app.get('/export-csv', (req, res) => {
       res.status(500).json({ message: 'Error al obtener los datos de la base de datos' });
     } else {
       // Convertir los datos a formato CSV utilizando json2csv
-      const fields = ['pregunta1', 'pregunta2', 'pregunta3', 'pregunta4', 'pregunta5', 'pregunta6', 'pregunta7', 'pregunta8', 'pregunta9', 'pregunta10', 'pregunta11', 'pregunta12'];
+      const fields = ['id','pregunta1', 'pregunta2', 'pregunta3', 'pregunta4', 'pregunta5', 'pregunta6', 'pregunta7', 'pregunta8', 'pregunta9', 'pregunta10', 'pregunta11', 'pregunta12'];
       const json2csvParser = new json2csv({ fields });
       const csv = json2csvParser.parse(results);
 

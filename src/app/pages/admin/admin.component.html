@@ -1,60 +1,85 @@
-<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Cargando... </p></ngx-spinner><mat-card>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true">
+  <p style="color: white"> Cargando... </p>
+</ngx-spinner><mat-card>
   <mat-card>
-  <mat-card-header>
-    <mat-card-title>Subir Dataset</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
+    <mat-card-header>
+      <mat-card-title>Subir Dataset</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
 
-    <br /><br />
-    <div class="button-container">
-      <div class="file-input-container">
-        <button mat-raised-button color="primary" class="custom-button" (click)="fileInput.click()">
-          <mat-icon>attach_file</mat-icon>
-          Seleccionar archivo
-        </button>
-        <input type="file" (change)="onFileChange($event)" accept=".csv" #fileInput style="display: none" />
+      <br /><br />
+      <div class="button-container">
+        <div class="file-input-container">
+          <button mat-raised-button color="primary" class="custom-button" (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+            Seleccionar archivo
+          </button>
+          <input type="file" (change)="onFileChange($event)" accept=".csv" #fileInput style="display: none" />
+        </div>
+        <!-- <button mat-raised-button color="primary" class="custom-button" (click)="cargarDatos()">Cargar Datos</button> -->
+        <button [disabled]="displayedColumns.length==0" mat-raised-button class="verde custom-button"
+          (click)="exportarCSV()">Exportar a CSV</button>
+        <button mat-raised-button color="accent" class="custom-button" (click)="consultarDatos()">Cargar datos de
+          BD</button>
+        <button mat-raised-button color="warn" class="custom-button" (click)="limpiar()">Limpiar</button>
       </div>
-      <!-- <button mat-raised-button color="primary" class="custom-button" (click)="cargarDatos()">Cargar Datos</button> -->
-      <button [disabled]="displayedColumns.length==0" mat-raised-button class="verde custom-button" (click)="exportarCSV()">Exportar a CSV</button>
-      <button mat-raised-button color="accent" class="custom-button" (click)="consultarDatos()">Cargar datos de BD</button>
-      <button mat-raised-button color="warn" class="custom-button" (click)="limpiar()">Limpiar</button>
-    </div>
 
-    <br /><br />
-    <div class="button-container">
-      <mat-form-field [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-      </mat-form-field>
+      <br><br>
+      <!-- Checkbox para seleccionar los signos zodiacales -->
+      <div *ngFor="let signo of signosZodiacales">
+        <input type="checkbox" [(ngModel)]="isSignoSelected[signo]" (change)="actualizarSignosSeleccionados(signo)">
+        {{ signo }}
+      </div>
 
-      <button mat-raised-button class="accent" (click)="obtenerGraficas()">Usar algoritmo K-means</button>
-      <button mat-raised-button class="accent" (click)="enviarDatos()">Enviar datos</button>
-    </div>
-    <!-- Agrega una clase al contenedor de la tabla -->
-    <div class="table-container mat-elevation-z8" [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
-      <table mat-table [dataSource]="dataSource">
-        <!-- Generar las columnas dinámicamente -->
-        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-          <th mat-header-cell *matHeaderCellDef>{{ column | titlecase }}</th>
-          <td mat-cell *matCellDef="let item">{{ item[column] }}</td>
-        </ng-container>
+      <!-- Checkbox para seleccionar las características -->
+      <div *ngFor="let caracteristica of caracteristicas">
+        <input type="checkbox" [(ngModel)]="isCaracteristicaSelected[caracteristica]"
+          (change)="actualizarCaracteristicasSeleccionadas(caracteristica)">
+        {{ caracteristica }}
+      </div>
 
-        <!-- Definir las columnas que se mostrarán en la tabla -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-      <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+      <button (click)="aplicarFiltros()">Aplicar</button>
 
 
-    </div>
 
-    <div *ngIf="graficas!=null">
-      <img [src]="bytesToImageUrl(graficas.centroidesOriginales, 'png')"  alt="">
-      <img [src]="bytesToImageUrl(graficas.base64_encoded_inercia, 'png')"  alt="">
-      <img [src]="bytesToImageUrl(graficas.base64_encoded_silueta, 'png')"  alt="">
-      <img [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')"  alt="">
-      <img [src]="bytesToImageUrl(graficas.base64_encoded_PCA, 'png')"  alt="">
-    </div>
-  </mat-card-content>
-</mat-card>
+
+
+      <br /><br />
+      <div class="button-container">
+        <mat-form-field [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+        </mat-form-field>
+
+        <button mat-raised-button class="accent" (click)="obtenerGraficas()">Usar algoritmo K-means</button>
+        <button mat-raised-button class="accent" (click)="enviarDatos()">Enviar datos</button>
+      </div>
+      <!-- Agrega una clase al contenedor de la tabla -->
+      <div class="table-container mat-elevation-z8"
+        [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
+        <table mat-table [dataSource]="dataSource">
+          <!-- Generar las columnas dinámicamente -->
+          <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+            <th mat-header-cell *matHeaderCellDef>{{ column | titlecase }}</th>
+            <td mat-cell *matCellDef="let item">{{ item[column] }}</td>
+          </ng-container>
+
+          <!-- Definir las columnas que se mostrarán en la tabla -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+
+
+      </div>
+
+      <div *ngIf="graficas!=null">
+        <img [src]="bytesToImageUrl(graficas.centroidesOriginales, 'png')" alt="">
+        <img [src]="bytesToImageUrl(graficas.base64_encoded_inercia, 'png')" alt="">
+        <img [src]="bytesToImageUrl(graficas.base64_encoded_silueta, 'png')" alt="">
+        <img [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')" alt="">
+        <img [src]="bytesToImageUrl(graficas.base64_encoded_PCA, 'png')" alt="">
+      </div>
+    </mat-card-content>
+  </mat-card>

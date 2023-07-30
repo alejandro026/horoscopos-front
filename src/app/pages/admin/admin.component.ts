@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as Papa from 'papaparse';
 import { HoroscoposService } from 'src/app/shared/services/horoscopos.service';
 import Swal from 'sweetalert2'
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -12,55 +13,146 @@ import Swal from 'sweetalert2'
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit{
+export class AdminComponent implements OnInit {
+
+  datos: any[] = [];
+
+  // Definir los signos zodiacales y características disponibles
+  signosZodiacales = ['Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo'];
+  caracteristicas = ['Pregunta 1',
+    'Pregunta 2',
+    'Pregunta 3',
+    'Pregunta 4',
+    'Pregunta 5',
+    'Pregunta 6',
+    'Pregunta 7',
+    'Pregunta 8',
+    'Pregunta 9',
+    'Pregunta 10',
+    'Pregunta 11',
+  ];
+
+  // Variables para almacenar las selecciones del usuario
+  selectedSignos: string[] = [];
+  selectedCaracteristicas: string[] = [];
+
+  // Crear objetos separados para almacenar el estado seleccionado de cada checkbox
+  isSignoSelected: { [key: string]: boolean } = {};
+  isCaracteristicaSelected: { [key: string]: boolean } = {};
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  graficas:any=null;
+  graficas: any = null;
 
   constructor(private horoscoposService: HoroscoposService,
-    private spinner: NgxSpinnerService){
+    private spinner: NgxSpinnerService) {
 
   }
 
   ngOnInit(): void {
-
+    //this.obtenerDatos();
   }
 
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
 
-  //Consultando datos de la base de datos
-  consultarDatos(){
+  actualizarSignosSeleccionados(signo: string) {
+    // Actualizar el arreglo selectedSignos basado en los checkboxes seleccionados
+    this.selectedSignos = this.signosZodiacales.filter(signo => this.isSignoSelected[signo]);
+  }
+
+  actualizarCaracteristicasSeleccionadas(caracteristica: string) {
+    // Actualizar el arreglo selectedCaracteristicas basado en los checkboxes seleccionados
+    this.selectedCaracteristicas = this.caracteristicas.filter(car => this.isCaracteristicaSelected[car]);
+  }
+
+
+  // Método para obtener los datos del servicio
+  obtenerDatos() {
     this.spinner.show();
 
-    this.horoscoposService.consultarDatos().subscribe({next:(data:any)=>{
-      console.log(data.data);
-      //Asigando los datos al datasource
-      this.dataSource = new MatTableDataSource(data.data);
-      //Asignando columnas
-      this.displayedColumns = Object.keys(data.data[0]);
-      this.dataSource.paginator = this.paginator;
-      this.spinner.hide();
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Datos consultados correctamente',
-        showConfirmButton: true
-        // timer: 1500
-      })
-    }, error:e=>{
-      this.spinner.hide();
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'Ocurrio un error al realizar la consulta',
-        showConfirmButton: true
-        // timer: 1500
-      })
+    this.horoscoposService.consultarDatos().subscribe({
+      next: (data: any) => {
+        console.log(data.data);
+        //Asignar los datos obtenidos al arreglo 'datos'
+        this.datos = data.data;
+      },
+      error: (e) => {
+        this.spinner.hide();
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Ocurrió un error al obtener los datos',
+          showConfirmButton: true
+        });
+      }
+    });
+  }
 
-    }})
+  aplicarFiltros() {
+
+    const datosFiltrados = this.filtrarDatosEn2D();
+    // Realizar una solicitud HTTP POST al servidor para enviar las selecciones al backend
+    const filtros = {
+      signos: this.selectedSignos,
+      caracteristicas: this.selectedCaracteristicas
+    };
+
+    this.horoscoposService.aplicarFiltros({ datos: datosFiltrados }).subscribe(
+      (data) => {
+        console.log(data);
+      },
+      (error) => {
+        console.error('Error al enviar filtros al servidor:', error);
+      }
+    );
+  }
+
+  filtrarDatosEn2D(): number[][] {
+    // Filtrar los datos basados en los signos y características seleccionadas
+    const datosFiltrados = this.datos.filter(registro =>
+      this.selectedSignos.includes(registro[0]) &&
+      this.selectedCaracteristicas.every(car => registro.slice(1, 12).includes(car))
+    );
+
+    // Convertir los datos filtrados en una matriz 2D
+    return datosFiltrados.map(registro => registro.slice(1, 12));
+  }
+
+  //Consultando datos de la base de datos
+  consultarDatos() {
+    this.spinner.show();
+
+    this.horoscoposService.consultarDatos().subscribe({
+      next: (data: any) => {
+        console.log(data.data);
+        //Asigando los datos al datasource
+        this.dataSource = new MatTableDataSource(data.data);
+        //Asignando columnas
+        this.displayedColumns = Object.keys(data.data[0]);
+        this.dataSource.paginator = this.paginator;
+        this.spinner.hide();
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Datos consultados correctamente',
+          showConfirmButton: true
+          // timer: 1500
+        })
+      }, error: e => {
+        this.spinner.hide();
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Ocurrió un error al realizar la consulta',
+          showConfirmButton: true
+          // timer: 1500
+        })
+
+      }
+    })
   }
 
   // Método que se ejecuta cuando se selecciona un archivo
@@ -126,58 +218,69 @@ export class AdminComponent implements OnInit{
     window.URL.revokeObjectURL(url);
   }
 
-  limpiar(){
-    this.dataSource=new MatTableDataSource([]);
-    this.displayedColumns=[];
-    this.graficas=null;
+  limpiar() {
+    this.dataSource = new MatTableDataSource([]);
+    this.displayedColumns = [];
+    this.graficas = null;
   }
 
-  obtenerGraficas(){
+  obtenerGraficas() {
     this.spinner.show();
-    this.horoscoposService.obtenerGraficas().subscribe({next:data=>{
-      this.spinner.hide();
-      console.log(data);
-      this.graficas=data;
-    }, error:e=>{
-      this.spinner.hide();
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'Ocurrio un error al generar las graficas',
-        showConfirmButton: true
-        // timer: 1500
-      })
-    }})
+    this.horoscoposService.obtenerGraficas().subscribe({
+      next: data => {
+        this.spinner.hide();
+        console.log(data);
+        this.graficas = data;
+      }, error: e => {
+        this.spinner.hide();
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'Ocurrió un error al generar las gráficas',
+          showConfirmButton: true
+          // timer: 1500
+        })
+      }
+    })
   }
 
-  bytesToImageUrl(bytes: Uint8Array, tipoImagen:string): string {
+  bytesToImageUrl(bytes: Uint8Array, tipoImagen: string): string {
     return `data:${tipoImagen};base64,${bytes}`;
   }
 
-  enviarDatos(){
-   if(this.dataSource && this.dataSource.filteredData.length>0){
-    const datosFinales=[];
+  enviarDatos() {
+    if (this.dataSource && this.dataSource.filteredData.length > 0) {
+      const datosFinales = [];
 
-    //Se quitan las primeras dos preguntas.
-    this.dataSource.filteredData.forEach(data=>{
-      const { id, pregunta1, ...resto } = data;
-      datosFinales.push(resto);
-    });
-    console.log(datosFinales);
-    this.horoscoposService.enviarDatos(datosFinales).subscribe({next: data=>{
-      console.log(data)
-    }, error:e=>{
+      //Se quitan las primeras dos preguntas.
+      this.dataSource.filteredData.forEach(data => {
+        const { id, pregunta1, ...resto } = data;
+        datosFinales.push(resto);
+      });
+      console.log(datosFinales);
+      this.horoscoposService.enviarDatos(datosFinales).subscribe({
+        next: data => {
+          console.log(data)
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Datos enviados correctamente',
+            showConfirmButton: true
+            // timer: 1500
+          })
+        }, error: e => {
 
-    }})
-   }else{
-    Swal.fire({
-      position: 'center',
-      icon: 'error',
-      title: 'Es necesario cargar el set de datos',
-      showConfirmButton: true
-      // timer: 1500
-    })
-   }
+        }
+      })
+    } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Es necesario cargar el set de datos',
+        showConfirmButton: true
+        // timer: 1500
+      })
+    }
   }
 
 }
