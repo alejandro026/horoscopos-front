@@ -19,17 +19,17 @@ export class AdminComponent implements OnInit {
 
   // Definir los signos zodiacales y características disponibles
   signosZodiacales = ['Aries', 'Tauro', 'Géminis', 'Cáncer', 'Leo', 'Virgo'];
-  caracteristicas = ['Pregunta 1',
-    'Pregunta 2',
-    'Pregunta 3',
-    'Pregunta 4',
-    'Pregunta 5',
-    'Pregunta 6',
-    'Pregunta 7',
-    'Pregunta 8',
-    'Pregunta 9',
-    'Pregunta 10',
-    'Pregunta 11',
+  caracteristicas = [
+    'pregunta2',
+    'pregunta3',
+    'pregunta4',
+    'pregunta5',
+    'pregunta6',
+    'pregunta7',
+    'pregunta8',
+    'pregunta9',
+    'pregunta10',
+    'pregunta11',
   ];
 
   // Variables para almacenar las selecciones del usuario
@@ -91,35 +91,7 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  aplicarFiltros() {
 
-    const datosFiltrados = this.filtrarDatosEn2D();
-    // Realizar una solicitud HTTP POST al servidor para enviar las selecciones al backend
-    const filtros = {
-      signos: this.selectedSignos,
-      caracteristicas: this.selectedCaracteristicas
-    };
-
-    this.horoscoposService.aplicarFiltros({ datos: datosFiltrados }).subscribe(
-      (data) => {
-        console.log(data);
-      },
-      (error) => {
-        console.error('Error al enviar filtros al servidor:', error);
-      }
-    );
-  }
-
-  filtrarDatosEn2D(): number[][] {
-    // Filtrar los datos basados en los signos y características seleccionadas
-    const datosFiltrados = this.datos.filter(registro =>
-      this.selectedSignos.includes(registro[0]) &&
-      this.selectedCaracteristicas.every(car => registro.slice(1, 12).includes(car))
-    );
-
-    // Convertir los datos filtrados en una matriz 2D
-    return datosFiltrados.map(registro => registro.slice(1, 12));
-  }
 
   //Consultando datos de la base de datos
   consultarDatos() {
@@ -248,7 +220,7 @@ export class AdminComponent implements OnInit {
     return `data:${tipoImagen};base64,${bytes}`;
   }
 
-  enviarDatos() {
+  enviarDatos2() {
     if (this.dataSource && this.dataSource.filteredData.length > 0) {
       const datosFinales = [];
 
@@ -282,5 +254,38 @@ export class AdminComponent implements OnInit {
       })
     }
   }
+
+  enviarDatos() {
+    if (this.dataSource && this.dataSource.filteredData.length > 0) {
+      const datosFinales = [];
+  
+      // Obtener todas las preguntas seleccionadas (excluyendo id y pregunta1)
+      const preguntasSeleccionadas = this.selectedCaracteristicas;
+  
+      this.dataSource.filteredData.forEach(data => {
+        console.log('Preguntas presentes en la fila:', Object.keys(data));
+  
+        const datosFiltrados = {};
+  
+        // Filtrar las preguntas seleccionadas para cada fila
+        for (const pregunta of preguntasSeleccionadas) {
+          if (data.hasOwnProperty(pregunta)) {
+            datosFiltrados[pregunta] = data[pregunta];
+          } else {
+            console.log(`Pregunta ${pregunta} no encontrada en la fila`);
+          }
+        }
+  
+        console.log('Fila filtrada:', datosFiltrados);
+  
+        datosFinales.push(datosFiltrados);
+      });
+  
+      console.log('Arreglo final:', datosFinales);
+  
+    } else {
+    }
+  }
+  
 
 }

@@ -25,12 +25,6 @@
       </div>
 
       <br><br>
-      <!-- Checkbox para seleccionar los signos zodiacales -->
-      <div *ngFor="let signo of signosZodiacales">
-        <input type="checkbox" [(ngModel)]="isSignoSelected[signo]" (change)="actualizarSignosSeleccionados(signo)">
-        {{ signo }}
-      </div>
-
       <!-- Checkbox para seleccionar las características -->
       <div *ngFor="let caracteristica of caracteristicas">
         <input type="checkbox" [(ngModel)]="isCaracteristicaSelected[caracteristica]"
@@ -38,7 +32,7 @@
         {{ caracteristica }}
       </div>
 
-      <button (click)="aplicarFiltros()">Aplicar</button>
+      
 
 
 
