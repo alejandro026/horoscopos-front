@@ -5,8 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as Papa from 'papaparse';
 import { HoroscoposService } from 'src/app/shared/services/horoscopos.service';
 import Swal from 'sweetalert2'
-import { FormsModule } from '@angular/forms';
-
 
 @Component({
   selector: 'app-admin',
@@ -30,6 +28,7 @@ export class AdminComponent implements OnInit {
     'pregunta9',
     'pregunta10',
     'pregunta11',
+    'pregunta12',
   ];
 
   // Variables para almacenar las selecciones del usuario
@@ -256,17 +255,28 @@ export class AdminComponent implements OnInit {
   }
 
   enviarDatos() {
+    const validacion=this.validaFormatoExcel(this.dataSource.filteredData);
+    if(!validacion){
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'El set de datos no tiene el formato adecuado',
+        showConfirmButton: true
+        // timer: 1500
+      })
+      return;
+    }
     if (this.dataSource && this.dataSource.filteredData.length > 0) {
       const datosFinales = [];
-  
+
       // Obtener todas las preguntas seleccionadas (excluyendo id y pregunta1)
       const preguntasSeleccionadas = this.selectedCaracteristicas;
-  
+
       this.dataSource.filteredData.forEach(data => {
         console.log('Preguntas presentes en la fila:', Object.keys(data));
-  
+
         const datosFiltrados = {};
-  
+
         // Filtrar las preguntas seleccionadas para cada fila
         for (const pregunta of preguntasSeleccionadas) {
           if (data.hasOwnProperty(pregunta)) {
@@ -275,17 +285,89 @@ export class AdminComponent implements OnInit {
             console.log(`Pregunta ${pregunta} no encontrada en la fila`);
           }
         }
-  
+
         console.log('Fila filtrada:', datosFiltrados);
-  
+
         datosFinales.push(datosFiltrados);
       });
-  
+
       console.log('Arreglo final:', datosFinales);
-  
+
+      this.horoscoposService.enviarDatos(datosFinales).subscribe({
+        next: data => {
+          console.log(data)
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Datos enviados correctamente',
+            showConfirmButton: true
+            // timer: 1500
+          })
+        }, error: e => {
+
+        }
+      })
     } else {
     }
   }
-  
+
+  //Mustra un si o un no en la tabla de datos
+  datosTablaSiNo(estado, column){
+    const mapa: { [key: number]: string } = {
+      1: "Aries",
+      2: "Tauro",
+      3: "Géminis",
+      4: "Cáncer",
+      5: "Leo",
+      6: "Virgo",
+    };
+    if(column=="id"){
+      return estado;
+    }
+    if(column=="pregunta1"){
+      return mapa[estado];
+    }
+    if (estado==0) {
+      return "No";
+    }
+    if(estado ==1){
+      return "Si";
+    }
+
+    return estado
+  }
+
+  tituloColumna(columna){
+    const mapa: { [key: string]: string } = {
+      id: "",
+      pregunta1: "Signo",
+      pregunta2: "Lider natural",
+      pregunta3: "Impulsivo",
+      pregunta4: "Perseverante",
+      pregunta5: "Curioso",
+      pregunta6: "Autoconfianza",
+      pregunta7: "Organizado",
+      pregunta8: "Sensible/Cariñoso",
+      pregunta9: "Reservado",
+      pregunta10: "Paciente/Practico",
+      pregunta11: "Expora diferentes ideas",
+      pregunta12: "Impaciente",
+    };
+    if(mapa[columna]==undefined){
+      return columna;
+    }
+    // console.log()
+    return mapa[columna];
+  }
+
+  validaFormatoExcel(valor){
+    const celdas=  Object.keys(valor[0]);
+    if(celdas[0]=="id"&&celdas[1]=="pregunta1"){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
 
 }
