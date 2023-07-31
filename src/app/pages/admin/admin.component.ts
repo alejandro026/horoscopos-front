@@ -426,6 +426,7 @@ export class AdminComponent implements OnInit {
       this.bytesToImageUrl(this.graficas.base64_encoded_silueta, 'png'),
       this.bytesToImageUrl(this.graficas.base64_encoded_puntos, 'png'),
       this.bytesToImageUrl(this.graficas.base64_encoded_PCA, 'png'),
+      this.bytesToImageUrl(this.graficas.base64_encoded_pastel, 'png'),
     ];
 
     const docDefinition = {
@@ -467,6 +468,15 @@ export class AdminComponent implements OnInit {
 
     const pdfDoc = pdfMake.createPdf(docDefinition);
     pdfDoc.open();
+  }
+
+  redesNeuronales(){
+    console.log(this.dataSource.filteredData)
+    let etiquetas=[];
+    this.dataSource.filteredData.forEach((data:any)=>{
+      etiquetas.push(data.pregunta1);
+    })
+    console.log(etiquetas)
   }
 
 

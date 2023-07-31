@@ -17,21 +17,21 @@ export class HoroscoposService {
 
   obtenerGraficas(){
     // return this.http.get('http://localhost:5000/kmeans')
-    return this.http.get('http://127.0.0.1:5000/kmeans')
+    return this.http.get('https://wildcat-mutual-stud.ngrok-free.app/kmeans')
   }
   enviarDatos(datos){
-    return this.http.post('http://127.0.0.1:5000/recibir_json', datos)
+    return this.http.post('https://wildcat-mutual-stud.ngrok-free.app/recibir_json', datos)
     // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
   }
 
   aplicarFiltros(datos){
-    return this.http.post('http://127.0.0.1:5000/filtrar', datos)
+    return this.http.post('https://wildcat-mutual-stud.ngrok-free.app/filtrar', datos)
     // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
   }
 
   descargarPDF() {
     // Hacer la petición HTTP GET al servidor Flask para descargar el PDF
-    const url = 'http://127.0.0.1:5000/descargar_pdf';
+    const url = 'https://wildcat-mutual-stud.ngrok-free.app/descargar_pdf';
     this.http.get(url, { responseType: 'blob' }).subscribe(
       (data) => {
         // Crear un objeto Blob con la respuesta del servidor
