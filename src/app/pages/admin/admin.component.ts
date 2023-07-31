@@ -5,7 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as Papa from 'papaparse';
 import { HoroscoposService } from 'src/app/shared/services/horoscopos.service';
 import Swal from 'sweetalert2'
-
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -215,23 +216,7 @@ export class AdminComponent implements OnInit {
   }
 
   obtenerGraficas() {
-    this.spinner.show();
-    this.horoscoposService.obtenerGraficas().subscribe({
-      next: data => {
-        this.spinner.hide();
-        console.log(data);
-        this.graficas = data;
-      }, error: e => {
-        this.spinner.hide();
-        Swal.fire({
-          position: 'center',
-          icon: 'error',
-          title: 'Ocurrió un error al generar las gráficas',
-          showConfirmButton: true
-          // timer: 1500
-        })
-      }
-    })
+
   }
 
   bytesToImageUrl(bytes: Uint8Array, tipoImagen: string): string {
@@ -250,14 +235,14 @@ export class AdminComponent implements OnInit {
       console.log(datosFinales);
       this.horoscoposService.enviarDatos(datosFinales).subscribe({
         next: data => {
-          console.log(data)
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Datos enviados correctamente',
-            showConfirmButton: true
-            // timer: 1500
-          })
+          // console.log(data)
+          // Swal.fire({
+          //   position: 'center',
+          //   icon: 'success',
+          //   title: 'Datos enviados correctamente',
+          //   showConfirmButton: true
+          //   // timer: 1500
+          // })
         }, error: e => {
 
         }
@@ -274,6 +259,17 @@ export class AdminComponent implements OnInit {
   }
 
   enviarDatos() {
+    const validacion=this.validaFormatoExcel(this.dataSource.filteredData);
+    if(!validacion){
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'El set de datos tiene un formato no válido',
+        showConfirmButton: true
+        // timer: 1500
+      })
+      return;
+    }
     if (this.dataSource && this.dataSource.filteredData.length > 0) {
       const datosFinales = [];
 
@@ -313,13 +309,39 @@ export class AdminComponent implements OnInit {
       this.horoscoposService.enviarDatos(datosFinales).subscribe({
         next: data => {
           console.log(data)
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Datos enviados correctamente',
-            showConfirmButton: true
-            // timer: 1500
+
+          this.spinner.show();
+          this.horoscoposService.obtenerGraficas().subscribe({
+            next: data => {
+              this.spinner.hide();
+              console.log(data);
+              this.graficas = data;
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Algoritmo aplicado correctamente',
+                  showConfirmButton: true
+                  // timer: 1500
+                })
+            }, error: e => {
+              this.spinner.hide();
+              Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Ocurrió un error al generar las gráficas',
+                showConfirmButton: true
+                // timer: 1500
+              })
+            }
           })
+
+          // Swal.fire({
+          //   position: 'center',
+          //   icon: 'success',
+          //   title: 'Datos enviados correctamente',
+          //   showConfirmButton: true
+          //   // timer: 1500
+          // })
         }, error: e => {
 
         }
@@ -394,5 +416,58 @@ export class AdminComponent implements OnInit {
     }
 
   }
+
+  descargarPdf() {
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+    const imagesBase64 = [
+      this.bytesToImageUrl(this.graficas.centroidesOriginales, 'png'),
+      this.bytesToImageUrl(this.graficas.base64_encoded_inercia, 'png'),
+      this.bytesToImageUrl(this.graficas.base64_encoded_silueta, 'png'),
+      this.bytesToImageUrl(this.graficas.base64_encoded_puntos, 'png'),
+      this.bytesToImageUrl(this.graficas.base64_encoded_PCA, 'png'),
+    ];
+
+    const docDefinition = {
+      content: [],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 10, 0, 10]
+        },
+        paragraph: {
+          fontSize: 12,
+          color: '#333333',
+          marginBottom: 10
+        }
+      }
+    };
+
+    const texts = [
+      'Posicionan los centroides en el espacio de las características originales',
+      'En esta gráfica, se ve cómo la inercia disminuye a medida que aumenta el número de clusters. El objetivo es encontrar el codo en la curva, donde la disminución en la inercia se estabiliza o se vuelve menos pronunciada.',
+      'En esta gráfica, el coeficiente de silueta varía entre -1 y 1. Un valor cercano a 1 indica que los clusters están bien definidos, mientras que un valor cercano a -1 indica que los puntos están mal asignados a los clusters.',
+      'En esta gráfica se muestra el numero de personas que pertencen a cada signo de acuerdo al agrupamiento',
+      'En esta grafica se muestra como se agruparon los centroides'
+    ];
+
+    imagesBase64.forEach((imageBase64, index) => {
+      docDefinition.content.push(
+        { text: 'K-Means', alignment: 'center', style: 'header' },
+        { text: texts[index], style: 'paragraph' },
+        { image: imageBase64, width: 470, alignment: 'center' }
+      );
+
+      if (index < imagesBase64.length - 1) {
+        // Add a new page after each image except the last one
+        docDefinition.content.push({ text: '', pageBreak: 'after' });
+      }
+    });
+
+    const pdfDoc = pdfMake.createPdf(docDefinition);
+    pdfDoc.open();
+  }
+
 
 }

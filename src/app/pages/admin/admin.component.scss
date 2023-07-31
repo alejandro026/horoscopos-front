@@ -18,6 +18,26 @@
   justify-content: space-between;
 }
 
+/* Estilos para pantallas grandes */
+@media screen and (min-width: 768px) {
+  .button-container {
+    flex-direction: row;
+  }
+}
+
+/* Estilos para pantallas medianas */
+@media screen and (max-width: 767px) {
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Estilos adicionales para los botones */
+  .button-container button {
+    margin-top: 10px;
+  }
+}
+
 
 mat-card {
   width: 90%;
@@ -54,4 +74,40 @@ mat-card-header {
 .custom-button {
   min-width: 23vh !important; /* Establece el ancho mínimo para los botones */
   text-align: center !important; /* Centra el texto en los botones */
+}
+
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.responsive-image {
+  max-width: 100%;
+  height: auto;
+}
+
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los botones se envuelvan en una nueva línea si no caben en una sola línea */
+  justify-content: space-between;
+}
+
+/* Estilos para los botones en general */
+.custom-button {
+  flex: 1; /* Los botones ocuparán el mismo espacio dentro del contenedor */
+  margin: 5px; /* Espacio entre los botones */
+}
+
+/* Media Query para ajustar el diseño en pantallas más pequeñas */
+@media screen and (max-width: 600px) {
+  .button-container {
+    flex-direction: column; /* Los botones se mostrarán en una columna en pantallas más pequeñas */
+  }
+
+  /* Estilos específicos para cada botón en pantallas más pequeñas */
+  .custom-button {
+    width: 100%; /* Los botones ocuparán todo el ancho del contenedor */
+  }
 }

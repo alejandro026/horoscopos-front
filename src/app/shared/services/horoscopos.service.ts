@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,23 @@ export class HoroscoposService {
   aplicarFiltros(datos){
     return this.http.post('http://127.0.0.1:5000/filtrar', datos)
     // return this.http.get('https://horoscopos-python.onrender.com/kmeans')
+  }
+
+  descargarPDF() {
+    // Hacer la petición HTTP GET al servidor Flask para descargar el PDF
+    const url = 'http://127.0.0.1:5000/descargar_pdf';
+    this.http.get(url, { responseType: 'blob' }).subscribe(
+      (data) => {
+        // Crear un objeto Blob con la respuesta del servidor
+        const blob = new Blob([data], { type: 'application/pdf' });
+
+        // Descargar el archivo usando file-saver
+        saveAs(blob, 'graficas.pdf');
+      },
+      (error) => {
+        console.error('Error al descargar el PDF', error);
+      }
+    );
   }
 
 }
