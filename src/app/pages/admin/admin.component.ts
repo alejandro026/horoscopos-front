@@ -142,7 +142,10 @@ export class AdminComponent implements OnInit {
       this.dataSource = new MatTableDataSource(parsedData);
       this.dataSource.paginator = this.paginator;
       this.displayedColumns = Object.keys(parsedData[0]);
-
+      // if(this.displayedColumns[this.displayedColumns.length-1]=="pregunta12\r"){
+      //   this.displayedColumns[this.displayedColumns.length-1]="pregunta12"
+      // }
+      console.log(this.displayedColumns)
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -164,7 +167,9 @@ export class AdminComponent implements OnInit {
       const row = lines[i].split(',');
       const obj = {};
       for (let j = 0; j < headers.length; j++) {
-        obj[headers[j]] = row[j];
+        const propertyName = headers[j]?.trim?.().replace(/[\r\n]+/g, '') || ''; // Verificación para evitar el error
+        const value = row[j]?.trim?.().replace(/[\r\n]+/g, '') || ''; // Verificación para evitar el error
+        obj[propertyName] = value;
       }
       data.push(obj);
     }
@@ -280,7 +285,7 @@ export class AdminComponent implements OnInit {
         // Filtrar las preguntas seleccionadas para cada fila
         for (const pregunta of preguntasSeleccionadas) {
           if (data.hasOwnProperty(pregunta)) {
-            datosFiltrados[pregunta] = data[pregunta];
+            datosFiltrados[pregunta] = parseInt(data[pregunta]);
           } else {
             console.log(`Pregunta ${pregunta} no encontrada en la fila`);
           }
@@ -292,6 +297,17 @@ export class AdminComponent implements OnInit {
       });
 
       console.log('Arreglo final:', datosFinales);
+      datosFinales.pop();
+      console.log("los finales", datosFinales)
+      // let objeto={};
+      // console.log(objeto)
+      //   if(datosFinales[0]==objeto){
+      //      //Se quitan las primeras dos preguntas.
+      //       this.dataSource.filteredData.forEach(data => {
+      //         const { id, pregunta1, ...resto } = data;
+      //         datosFinales.push(resto);
+      //       });
+      //   }
 
       this.horoscoposService.enviarDatos(datosFinales).subscribe({
         next: data => {
