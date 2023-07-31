@@ -29,7 +29,7 @@
       <div *ngFor="let caracteristica of caracteristicas">
         <input type="checkbox" [(ngModel)]="isCaracteristicaSelected[caracteristica]"
           (change)="actualizarCaracteristicasSeleccionadas(caracteristica)">
-        {{ caracteristica }}
+        {{ nombresMostrados[caracteristica] || caracteristica }}
       </div>
 
 

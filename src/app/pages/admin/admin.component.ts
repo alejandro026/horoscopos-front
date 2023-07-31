@@ -31,6 +31,20 @@ export class AdminComponent implements OnInit {
     'pregunta12',
   ];
 
+  nombresMostrados = {
+    pregunta2: "Lider natural",
+      pregunta3: "Impulsivo",
+      pregunta4: "Perseverante",
+      pregunta5: "Curioso",
+      pregunta6: "Autoconfianza",
+      pregunta7: "Organizado",
+      pregunta8: "Sensible/Cariñoso",
+      pregunta9: "Reservado",
+      pregunta10: "Paciente/Practico",
+      pregunta11: "Expora diferentes ideas",
+      pregunta12: "Impaciente"
+  };
+
   // Variables para almacenar las selecciones del usuario
   selectedSignos: string[] = [];
   selectedCaracteristicas: string[] = [];
@@ -260,17 +274,6 @@ export class AdminComponent implements OnInit {
   }
 
   enviarDatos() {
-    const validacion=this.validaFormatoExcel(this.dataSource.filteredData);
-    if(!validacion){
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'El set de datos no tiene el formato adecuado',
-        showConfirmButton: true
-        // timer: 1500
-      })
-      return;
-    }
     if (this.dataSource && this.dataSource.filteredData.length > 0) {
       const datosFinales = [];
 
@@ -278,8 +281,6 @@ export class AdminComponent implements OnInit {
       const preguntasSeleccionadas = this.selectedCaracteristicas;
 
       this.dataSource.filteredData.forEach(data => {
-        console.log('Preguntas presentes en la fila:', Object.keys(data));
-
         const datosFiltrados = {};
 
         // Filtrar las preguntas seleccionadas para cada fila
@@ -287,11 +288,9 @@ export class AdminComponent implements OnInit {
           if (data.hasOwnProperty(pregunta)) {
             datosFiltrados[pregunta] = parseInt(data[pregunta]);
           } else {
-            console.log(`Pregunta ${pregunta} no encontrada en la fila`);
+            datosFiltrados[pregunta] = 'Sin datos';
           }
         }
-
-        console.log('Fila filtrada:', datosFiltrados);
 
         datosFinales.push(datosFiltrados);
       });
@@ -309,6 +308,8 @@ export class AdminComponent implements OnInit {
       //       });
       //   }
 
+
+      console.log(datosFinales);
       this.horoscoposService.enviarDatos(datosFinales).subscribe({
         next: data => {
           console.log(data)
@@ -324,8 +325,16 @@ export class AdminComponent implements OnInit {
         }
       })
     } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Es necesario cargar el set de datos',
+        showConfirmButton: true
+        // timer: 1500
+      })
     }
   }
+
 
   //Mustra un si o un no en la tabla de datos
   datosTablaSiNo(estado, column){
