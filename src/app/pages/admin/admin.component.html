@@ -22,29 +22,29 @@
         <button mat-raised-button color="warn" class="custom-button" (click)="limpiar()">Limpiar</button>
       </div>
 
-
-
       <br><br>
-      <!-- Checkbox para seleccionar las características -->
-      <div *ngFor="let caracteristica of caracteristicas">
-        <input type="checkbox" [(ngModel)]="isCaracteristicaSelected[caracteristica]"
-          (change)="actualizarCaracteristicasSeleccionadas(caracteristica)">
-        {{ nombresMostrados[caracteristica] || caracteristica }}
+
+      <div class="col" [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
+        <div *ngFor="let signo of signosZodiacales">
+          <input type="checkbox" [(ngModel)]="isSignpSelected[signo]" (change)="actualizarSignosSeleccionados(signo)">
+          {{signo}}
+        </div>
+        <br>
+        <!-- Checkbox para seleccionar las características -->
+        <div *ngFor="let caracteristica of caracteristicas">
+          <input type="checkbox" [(ngModel)]="isCaracteristicaSelected[caracteristica]"
+            (change)="actualizarCaracteristicasSeleccionadas(caracteristica)">
+          {{ nombresMostrados[caracteristica] || caracteristica }}
+        </div>
       </div>
-
-
-
-
-
-
 
       <br /><br />
       <div class="button-container">
-        <mat-form-field [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
+        <!-- <mat-form-field [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }">
           <mat-label>Filter</mat-label>
           <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-        </mat-form-field>
-
+        </mat-form-field> -->
+        <br><br>
         <button mat-raised-button class="accent" (click)="enviarDatos()">Usar algoritmo K-means</button>
         <!-- <button mat-raised-button class="accent" (click)="redesNeuronales()">Enviar datos</button> -->
       </div>

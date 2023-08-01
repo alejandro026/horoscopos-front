@@ -53,6 +53,7 @@ export class AdminComponent implements OnInit {
   // Crear objetos separados para almacenar el estado seleccionado de cada checkbox
   isSignoSelected: { [key: string]: boolean } = {};
   isCaracteristicaSelected: { [key: string]: boolean } = {};
+  isSignpSelected: { [key: string]: boolean } = {};
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -272,7 +273,6 @@ export class AdminComponent implements OnInit {
     }
     if (this.dataSource && this.dataSource.filteredData.length > 0) {
       const datosFinales = [];
-
       // Obtener todas las preguntas seleccionadas (excluyendo id y pregunta1)
       const preguntasSeleccionadas = this.selectedCaracteristicas;
 
@@ -294,24 +294,20 @@ export class AdminComponent implements OnInit {
       console.log('Arreglo final:', datosFinales);
       datosFinales.pop();
       console.log("los finales", datosFinales)
-      // let objeto={};
-      // console.log(objeto)
-      //   if(datosFinales[0]==objeto){
-      //      //Se quitan las primeras dos preguntas.
-      //       this.dataSource.filteredData.forEach(data => {
-      //         const { id, pregunta1, ...resto } = data;
-      //         datosFinales.push(resto);
-      //       });
-      //   }
 
+      let jsonDatos={
+        datosFinales: datosFinales,
+        signosSeleccionados: Object.keys(this.isSignpSelected).filter(clave => this.isSignpSelected[clave])
 
-      console.log(datosFinales);
-      this.horoscoposService.enviarDatos(datosFinales).subscribe({
+      }
+      let numeroSignos= Object.keys(this.isSignpSelected).filter(clave => this.isSignpSelected[clave]).length;
+      // console.log("Seleccionado", )
+      this.horoscoposService.enviarDatos(jsonDatos).subscribe({
         next: data => {
           console.log(data)
 
           this.spinner.show();
-          this.horoscoposService.obtenerGraficas().subscribe({
+          this.horoscoposService.obtenerGraficas(numeroSignos).subscribe({
             next: data => {
               this.spinner.hide();
               console.log(data);
@@ -470,14 +466,7 @@ export class AdminComponent implements OnInit {
     pdfDoc.open();
   }
 
-  redesNeuronales(){
-    console.log(this.dataSource.filteredData)
-    let etiquetas=[];
-    this.dataSource.filteredData.forEach((data:any)=>{
-      etiquetas.push(data.pregunta1);
-    })
-    console.log(etiquetas)
-  }
+
 
 
 }

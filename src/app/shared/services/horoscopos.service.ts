@@ -15,9 +15,9 @@ export class HoroscoposService {
     // return this.http.get('http://localhost:3000/consultar-datos')
   }
 
-  obtenerGraficas(){
+  obtenerGraficas(k){
     // return this.http.get('http://localhost:5000/kmeans')
-    return this.http.get('https://wildcat-mutual-stud.ngrok-free.app/kmeans')
+    return this.http.get('https://wildcat-mutual-stud.ngrok-free.app/kmeans/'+k)
   }
   enviarDatos(datos){
     return this.http.post('https://wildcat-mutual-stud.ngrok-free.app/recibir_json', datos)
