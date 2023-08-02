@@ -64,23 +64,26 @@
         </table>
 
       </div>
-      <mat-paginator [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }"></mat-paginator>
+      <mat-paginator class="custom-paginator" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons [ngClass]="{ 'ocultar': displayedColumns.length == 0, 'mostrado': displayedColumns.length>0 }"></mat-paginator>
 
       <div *ngIf="graficas!=null">
         <div class="row">
           <div class="col">
             <br><br>
             <button mat-raised-button color="warn" class="custom-button" (click)="descargarPdf()" >Descargar PDF </button>
+            <button mat-raised-button color="accent" class="custom-button" (click)="agglomerative()">Comparar con clustering jerárquico aglomerativo</button>
           </div>
         </div>
-
-        <img class="responsive-image" [src]="bytesToImageUrl(graficas.centroidesOriginales, 'png')" alt="">
-        <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_inercia, 'png')" alt="">
-        <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_silueta, 'png')" alt="">
-        <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')" alt="">
-        <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_PCA, 'png')" alt="">
-        <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_pastel, 'png')" alt="">
-
+        <div class="row">
+          <div class="col centrado">
+            <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_pastel, 'png')" alt="">
+            <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_puntos, 'png')" alt="">
+            <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_PCA, 'png')" alt="">
+            <img class="responsive-image" [src]="bytesToImageUrl(graficas.centroidesOriginales, 'png')" alt="">
+            <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_inercia, 'png')" alt="">
+            <img class="responsive-image" [src]="bytesToImageUrl(graficas.base64_encoded_silueta, 'png')" alt="">
+          </div>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

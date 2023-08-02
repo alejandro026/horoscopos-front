@@ -7,6 +7,8 @@ import { HoroscoposService } from 'src/app/shared/services/horoscopos.service';
 import Swal from 'sweetalert2'
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { MatDialog } from '@angular/material/dialog';
+import { AgglomerativeComponent } from './agglomerative/agglomerative.component';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -60,8 +62,11 @@ export class AdminComponent implements OnInit {
 
   graficas: any = null;
 
+  numSig:number;
+
   constructor(private horoscoposService: HoroscoposService,
-    private spinner: NgxSpinnerService) {
+    private spinner: NgxSpinnerService,
+    public dialog: MatDialog) {
 
   }
 
@@ -214,6 +219,8 @@ export class AdminComponent implements OnInit {
     this.dataSource = new MatTableDataSource([]);
     this.displayedColumns = [];
     this.graficas = null;
+    this.isSignpSelected={};
+    this.isCaracteristicaSelected={};
   }
 
   obtenerGraficas() {
@@ -260,6 +267,10 @@ export class AdminComponent implements OnInit {
   }
 
   enviarDatos() {
+    if(!this.validaChecbox()){
+      return;
+    }
+
     const validacion=this.validaFormatoExcel(this.dataSource.filteredData);
     if(!validacion){
       Swal.fire({
@@ -302,6 +313,7 @@ export class AdminComponent implements OnInit {
       }
       let numeroSignos= Object.keys(this.isSignpSelected).filter(clave => this.isSignpSelected[clave]).length;
       // console.log("Seleccionado", )
+      this.numSig=numeroSignos;
       this.horoscoposService.enviarDatos(jsonDatos).subscribe({
         next: data => {
           console.log(data)
@@ -351,6 +363,34 @@ export class AdminComponent implements OnInit {
         // timer: 1500
       })
     }
+  }
+
+  validaChecbox():boolean{
+    let horoscoposSeleccionados=Object.keys(this.isSignpSelected).filter(clave => this.isSignpSelected[clave]);
+    let caracteristicasSeleccionadas= this.selectedCaracteristicas;
+    console.log(horoscoposSeleccionados)
+    if(horoscoposSeleccionados.length<2){
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Debes seleccionar al menos 2 signos.',
+        showConfirmButton: true
+        // timer: 1500
+      })
+      return false;
+    }
+    if(caracteristicasSeleccionadas.length<2){
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Debes seleccionar al menos 2 características.',
+        showConfirmButton: true
+        // timer: 1500
+      })
+      return false;
+    }
+
+    return true;
   }
 
 
@@ -417,12 +457,12 @@ export class AdminComponent implements OnInit {
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
     const imagesBase64 = [
+      this.bytesToImageUrl(this.graficas.base64_encoded_pastel, 'png'),
       this.bytesToImageUrl(this.graficas.centroidesOriginales, 'png'),
       this.bytesToImageUrl(this.graficas.base64_encoded_inercia, 'png'),
       this.bytesToImageUrl(this.graficas.base64_encoded_silueta, 'png'),
       this.bytesToImageUrl(this.graficas.base64_encoded_puntos, 'png'),
       this.bytesToImageUrl(this.graficas.base64_encoded_PCA, 'png'),
-      this.bytesToImageUrl(this.graficas.base64_encoded_pastel, 'png'),
     ];
 
     const docDefinition = {
@@ -442,6 +482,7 @@ export class AdminComponent implements OnInit {
     };
 
     const texts = [
+      '',
       'Posicionan los centroides en el espacio de las características originales',
       'En esta gráfica, se ve cómo la inercia disminuye a medida que aumenta el número de clusters. El objetivo es encontrar el codo en la curva, donde la disminución en la inercia se estabiliza o se vuelve menos pronunciada.',
       'En esta gráfica, el coeficiente de silueta varía entre -1 y 1. Un valor cercano a 1 indica que los clusters están bien definidos, mientras que un valor cercano a -1 indica que los puntos están mal asignados a los clusters.',
@@ -466,7 +507,19 @@ export class AdminComponent implements OnInit {
     pdfDoc.open();
   }
 
-
-
+  agglomerative(){
+    let datos={
+      graficas:this.graficas,
+      numSig: this.numSig
+    }
+    const modalRef = this.dialog.open(AgglomerativeComponent, {
+      data: datos,
+      width: '100%', // Asegúrate de establecer el ancho en '100%' para que ocupe toda la pantalla
+      maxHeight: '100vh', // Establece la altura máxima para que ocupe toda la pantalla en pantallas pequeñas
+    });
+    modalRef.afterClosed().subscribe((result) => {
+      //Se cerro el dialog
+    });
+  }
 
 }

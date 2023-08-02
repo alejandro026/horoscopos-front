@@ -87,6 +87,12 @@ img {
   height: auto;
 }
 
+/* Media Query para ajustar el diseño en pantallas más pequeñas */
+// @media screen and (max-width: 1300px) {
+//   .responsive-image {
+//     max-width: 100%;
+//   }
+// }
 
 .button-container {
   display: flex;
@@ -110,4 +116,10 @@ img {
   .custom-button {
     width: 100%; /* Los botones ocuparán todo el ancho del contenedor */
   }
+}
+
+.centrado {
+  display: flex;
+  flex-direction: column; /* Apilar elementos en columnas */
+  align-items: center; /* Centrar verticalmente */
 }

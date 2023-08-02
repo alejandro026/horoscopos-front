@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { AgglomerativeComponent } from './agglomerative/agglomerative.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 // Available options
@@ -22,7 +24,8 @@ interface NgxSpinnerConfig {
 
 @NgModule({
   declarations: [
-    AdminComponent
+    AdminComponent,
+    AgglomerativeComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +40,7 @@ interface NgxSpinnerConfig {
     MatTableModule,
     MatPaginatorModule,
     FormsModule,
+    MatDialogModule,
     NgxSpinnerModule.forRoot({ type: 'square-jelly-box' }),
   ]
 })
